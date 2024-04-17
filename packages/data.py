@@ -119,7 +119,7 @@ class ExecutionHandler():
     
     report: pd.DataFrame = None
     
-    directory: str = abspath(__file__).replace('Pipeline\\packages\\data.py', 'Exports\\Week Ending')
+    directory: str = abspath(__file__).replace('bin\\packages\\data.py', 'Exports\\Week Ending')
 
     @staticmethod
     def loadReport(path: str) -> pd.DataFrame:

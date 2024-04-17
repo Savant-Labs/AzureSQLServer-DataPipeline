@@ -1,4 +1,5 @@
 import warnings
+import argparse
 
 import pandas as pd
 
@@ -24,7 +25,7 @@ class ControlFlow():
         return connection
 
     @staticmethod
-    def importSQLdata(connection: database.Connection) -> list:
+    def importSQL(connection: database.Connection) -> list:
         data = connection.read()
 
         return data
@@ -47,26 +48,57 @@ class ControlFlow():
         )
 
         return df
-
+    
     @classmethod
-    def execute(cls):
-        db = cls.connect()
-        data = cls.importSQLdata(db)
+    def append(cls):
+        database = cls.connect()
         report = cls.readCSV()
 
-        log.state('Adding Report Data...')
-        final = cls.merge(left=data, right=report)
-
-        
         log.state('Preparing to Upload Data...')
-        db.write(final, overwrite=True)
-
-        log.debug(f'Uploaded {final.shape[0] - data.shape[0]} rows')
+        database.write(report)
+        log.debug(f'Uploaded {report.shape[0]} rows')
 
         return
 
+    @classmethod
+    def overwrite(cls):
+        database = cls.connect()
+        data = cls.importSQL(database)
+
+        report = cls.readCSV()
+
+        log.state('Merging Datasets...')
+        merged = cls.merge(left=data, right=report)
+
+        log.state('Preparing to Upload...')
+        database.write(merged, overwrite=True)
+
+        log.debug(f'Uploaded {merged.shape[0]} rows')
+
+        return
+
+    @classmethod
+    def execute(cls, method: str = 'append'):
+        if method == 'append':
+            cls.append()
+        
+        else:
+            cls.overwrite()
+
+            
+
 if __name__ == '__main__':
-    ControlFlow.execute()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--overwrite', action='store_true', help = 'Overwrite Database with Records')
+    args = parser.parse_args()
+
+    if args.overwrite:
+        ControlFlow.execute(method='overwrite')
+    else:
+        ControlFlow.execute() 
+
+
 
     
 

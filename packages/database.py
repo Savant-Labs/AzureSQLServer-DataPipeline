@@ -145,7 +145,7 @@ class Connection():
         log.state('Writing Data...')
         print()
         
-        bar = '{desc}: {percentage:.1f}% | {bar: 50} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}] ({rate_fmt}{postfix})'
+        bar = '{desc}: {percentage:.1f}% | {bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}] ({rate_fmt}{postfix})'
         desc = 'Writing DataFrame to SQL Server'
         unit = ' rows'
         color = '#00FF00'

@@ -146,7 +146,7 @@ class Connection():
         print()
         
         kwargs = {
-            'ascii': ' ▒█',
+            'ascii': ' ❙',
             'bar_format': '{desc}: {percentage:.1f}% | {bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}] ({rate_fmt}{postfix})',
             'desc': 'Writing DataFrame to SQL Server',
             'unit': ' rows',

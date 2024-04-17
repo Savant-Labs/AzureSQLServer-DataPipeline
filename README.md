@@ -9,6 +9,7 @@ This project collects and analyzes data from two individual sources:
 - Azure SQL Server (sales reports to be reviewed)
 - A Local .CSV Export File (new records to upload)
 
+```
 ├── Project
 │   ├── Exports
 |   |   ├── Week Ending mm-dd-yyyy.csv
@@ -25,6 +26,7 @@ This project collects and analyzes data from two individual sources:
 |   |   ├── .env
 |   |   ├── main.py
 |   |   ├── .gitignore
+```
 
 ### The Process
 This program follows 5 simple steps to prevent against SQL injections and malformed data.

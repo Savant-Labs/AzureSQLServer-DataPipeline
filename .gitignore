@@ -1,0 +1,7 @@
+*.env
+*.csv
+*.code-workspace
+
+**/logfiles/errors
+**/logfiles/events
+**/__pycache__/

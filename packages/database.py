@@ -5,6 +5,7 @@ import sqlalchemy
 
 import pandas as pd
 
+from tqdm import tqdm
 from dotenv import load_dotenv
 
 from sqlalchemy import engine
@@ -37,7 +38,9 @@ class Connection():
             'AzureServerIP',
             'AzureDatabase',
             'AzureUsername',
-            'AzurePassword'
+            'AzurePassword',
+            'AzureDBSchema',
+            'DatabaseTable'
         ]
 
         vars = {}
@@ -130,16 +133,30 @@ class Connection():
 
         else:
             log.debug('Preparing to Append New Data...')
+
+        def get_chunks(df: pd.DataFrame, size: int):
+            return (
+                df[pos : pos + size]
+                for pos in range(0, len(df), size)
+            )
         
+        chunk_size = 1000
+
         log.state('Writing Data...')
-        data.to_sql(
-            'ArrowStream', 
-            self.engine, 
-            schema='dbo', 
-            index=False, 
-            dtype=self._structure,
-            if_exists='append'
-        )
+        print()
+        
+        with tqdm(total=len(data)) as pbar:
+            for i, chunk in enumerate(get_chunks(data, chunk_size)):
+                chunk.to_sql(
+                    self.env.DatabaseTable,
+                    self.engine,
+                    schema = self.env.AzureDBSchema,
+                    index = False,
+                    dtype = self._structure,
+                    if_exists = 'append'
+                )
+
+                pbar.update(chunk_size)
         
         log.state('Removing Duplicate Records...')
         count = self.execute(RemoveDuplicates)

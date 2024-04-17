@@ -1,4 +1,12 @@
-RemoveDuplicates = '''
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+schema = os.getenv('AzureDBSchema')
+table = os.getenv('DatabaseTable')
+
+RemoveDuplicates = f'''
     WITH CTE AS (
         SELECT *,
         ROW_NUMBER() 
@@ -10,21 +18,21 @@ RemoveDuplicates = '''
 
         AS RowNum
         
-        FROM dbo.ArrowStream
+        FROM {schema}.{table}
     )
 
     DELETE FROM CTE WHERE RowNum > 1;
 '''
 
-SelectAll = '''
-    SELECT * FROM dbo.ArrowStream;
+SelectAll = f'''
+    SELECT * FROM {schema}.{table};
 '''
 
-ClearTable = '''
-    DELETE FROM dbo.ArrowStream;
+ClearTable = f'''
+    DELETE FROM d{schema}.{table};
 '''
 
-ImportRecord = '''
-    INSERT INTO dbo.ArrowStream
+ImportRecord = f'''
+    INSERT INTO {schema}.{table}
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 '''

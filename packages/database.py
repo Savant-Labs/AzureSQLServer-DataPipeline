@@ -145,7 +145,12 @@ class Connection():
         log.state('Writing Data...')
         print()
         
-        with tqdm(total=len(data)) as pbar:
+        bar = '{desc}: {percentage:.1f}% | {bar: 50} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}] ({rate_fmt}{postfix})'
+        desc = 'Writing DataFrame to SQL Server'
+        unit = ' rows'
+        color = '#00FF00'
+
+        with tqdm(total=len(data), bar_format=bar, desc=desc, unit=unit, colour=color) as pbar:
             for i, chunk in enumerate(get_chunks(data, chunk_size)):
                 chunk.to_sql(
                     self.env.DatabaseTable,

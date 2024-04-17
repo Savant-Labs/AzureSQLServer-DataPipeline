@@ -30,19 +30,21 @@ This project collects and analyzes data from two individual sources:
 
 ### The Process
 This program follows 5 simple steps to prevent against SQL injections and malformed data.
-1. Load and Sanitize CSV Export
+1. **Load and Sanitize CSV Export**
     - Prompt for User Input to locate correct file in `/Projects/Exports/` directory
     - Load file data into DataFrame
     - Map CSV Column Headers to Database Column Names
     - Convert CSV Column Types to Database Column Types
     - Create Calculated Column `Record` to Identify Duplicate Rows
 
-2. Load SQL Server Data
-3. Vertical Join Sanitized Data
-4. Re-sanitize Joined Data
+2. **Load SQL Server Data**
+    - We use a combination of `SQLAlchemy` and `pyodbc`
+3. **Vertical Join Sanitized Data**
+    - Using `pandas.concat` for future proofing
+4. **Re-sanitize Joined Data**
     - Ensure all Database columns are present in DataFrame
     - Convert DataFrame columns types to Database Column Types
-5. Upload Sanitized Data
+5. **Upload Sanitized Data**
     - Delete all records in Azure Database (optional)
     - Upload all records from Sanitized DataFrame
 

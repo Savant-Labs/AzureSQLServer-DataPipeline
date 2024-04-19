@@ -49,7 +49,8 @@ class ControlFlow():
             axis = 0
         )
 
-        condensed = duckdb.query(RemoveDuplicatePD).to_df()
+        df.sort_values(by="Shipped", ascending=False, inplace=True)
+        condensed = df.drop_duplicates(subset="Record", keep="first", inplace=True)
         log.debug(f'Removed {df.shape[0] - condensed.shape[0]} duplicate row entires')
 
         return condensed

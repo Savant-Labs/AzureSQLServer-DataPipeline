@@ -49,8 +49,10 @@ class ControlFlow():
             axis = 0
         )
 
-        df.sort_values(by="Shipped", ascending=False, inplace=True)
-        condensed = df.drop_duplicates(subset="Record", keep="first", inplace=True)
+        condensed = df.copy(deep=True)
+
+        condensed.sort_values(by="Shipped", ascending=False, inplace=True)
+        condensed.drop_duplicates(subset="Record", keep="first", inplace=True)
         log.debug(f'Removed {df.shape[0] - condensed.shape[0]} duplicate row entires')
 
         return condensed

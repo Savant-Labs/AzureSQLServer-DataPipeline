@@ -166,9 +166,11 @@ class Connection():
                 )
 
                 pbar.update(chunk_size)
+    
+        self.engine.dispose()
         
         log.state('Removing Duplicate Records...')
-        count = self.execute(RemoveDuplicates)
+        count = self.execute(RemoveDuplicateSQL)
         # log.debug(f'Deleted {count} records')
 
         self.connection.commit()

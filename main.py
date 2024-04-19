@@ -1,11 +1,13 @@
 import warnings
 import argparse
+import duckdb
 
 import pandas as pd
 
 from packages import data
 from packages import database
 
+from packages.queries import *
 from packages.logger import setup as setup_logs
 from packages.logger import CustomLogger as log
 
@@ -47,7 +49,10 @@ class ControlFlow():
             axis = 0
         )
 
-        return df
+        condensed = duckdb.query(RemoveDuplicatePD).to_df()
+        log.debug(f'Removed {df.shape[0] - condensed.shape[0]} duplicate row entires')
+
+        return condensed
     
     @classmethod
     def append(cls):
